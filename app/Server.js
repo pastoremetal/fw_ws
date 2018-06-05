@@ -36,6 +36,13 @@ function Server(portIn, addressIn/*, DB*/) {
                 clients.splice(clients.indexOf(client), 1);
                 console.log(`${client.getName()} disconnected.`);
             });
+
+            socket.on("error", (err) => {
+                //clients.splice(clients.indexOf(client), 1);
+                socketIn.end();
+                socketIn.destroy();
+                console.log(`${client.getName()} abruptly disconnected.`);
+            });
         });
         connection.listen(port, address);
         connection.on('listening', callback);

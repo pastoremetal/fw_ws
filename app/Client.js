@@ -1,4 +1,5 @@
 ﻿const Router = require('./Router');
+const CommandChain = require('./CommandChain');
 
 function Client(socketIn, socketInJs, database) {
     let address = socketIn.remoteAddress;
@@ -15,37 +16,26 @@ function Client(socketIn, socketInJs, database) {
     let appKey = null;
     let appValidated = false;
     let db = database;
+    let chainCount = 0;
+    let commandChains = {};
+    let that = this;
 
-    let loginTimeout = setTimeout(function () {
+    /*let loginTimeout = setTimeout(function () {
         if (this.getLoginTime() === null)
             this.closeClient();
-    }.bind(this), 15000);
+    }.bind(this), 15000);*/
 
     this.executeCommand = function (i, message) {
+        let rt = null;
         try {
             let controller = router.getController(i);
-            let instance = new controller[i]({parent: this}, message);
+            let instance = new controller[i]({ parent: that }, message);
+            rt = instance.init();
+            return rt;
         } catch (err) {
             console.log(err);
             socketJs.sendMessage({ "ERROR": err });
         }
-        
-
-
-        /*try {
-            let callBack = null;
-            let controller = router.getController(i);
-            let instance = new controller[i](message);
-            switch (i) {
-                case 'SND_LGI':
-                    callBack = function () { loginTime = new Date(); }
-            }
-            if (typeof callBack == 'function')
-                callBack.call(this, message);
-        } catch (err) {
-            console.log(err);
-            socketJs.sendMessage({ "ERROR": err });
-        }*/
     }
 
     this.getAddress = function () { return address; }
@@ -60,6 +50,7 @@ function Client(socketIn, socketInJs, database) {
     this.getDb = function () { return db; }
     this.getSocketJs = function () { return socketJs; }
     this.getAppKey = function () { return appKey; }
+    this.getAppValidated = function () { return appValidated; }
 
     this.setSessionKey = function (key) { sessionKey = key; }
 
@@ -75,20 +66,35 @@ function Client(socketIn, socketInJs, database) {
         appKey = key;
     }
 
+    this.removeCommandChain = function (cIndex) {
+        delete commandChains[cIndex];
+    }
+
     this.receiveCommand = function (message) {
-        if (message != undefined && typeof message == "object")
-            for (let i in message) {
+        let that = this;
+        if (message != undefined && typeof message == "object") {
+            //console.log(message);
+            commandChains[chainCount] = new CommandChain(message, that, chainCount);
+            //console.log('ini');
+            //commandChains[chainCount].startChain();
+            /*console.log("cmC");
+            console.log(commandChains[chainCount]);*/
+            chainCount++;
+        }
+            /*for (let i in message) {
+                console.log(i);
                 if (appValidated === true && i != "SND_APP_KEY")
                     this.executeCommand(i, message[i]);
                 else if (i == "SND_APP_KEY") {
                     this.executeCommand("VLD_APP", message[i]);
 
                 } else {
-                    console.log({ i: { "ERROR": "APP VALIDATION NEEDED" } });
-                    socketJs.sendMessage({ i: { "ERROR": "APP VALIDATION NEEDED" } });
+                    msg = {};
+                    msg[i] = { "ERROR": "APP VALIDATION NEEDED" };
+                    console.log(msg);
+                    socketJs.sendMessage(msg);
                 }
-
-            }
+            }*/
     }
 }
 module.exports = Client;
