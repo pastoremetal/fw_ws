@@ -18,6 +18,8 @@
                     rt = new Promise((resolve, reject) => {
                         //parent.getDb().getConn().execute("CALL prc_usr_login(?, ?, ?, ?, ?, ?)", [parent.getAppKey(), parent.getAddress(), usr, psw, cli_ip, cli_mac], function (err, result) {
                         parent.getDb().getConn().execute("CALL prc_usr_login(?, ?, ?, ?, ?)", [parent.getAppKey(), parent.getAddress(), usr, psw, cli_ip], function (err, result) {
+                            //console.log(err);
+                            //console.log(result);
                             if (err) {
                                 //console.log({ "SND_LGI": { "ERROR": err.sqlMessage } });
                                 //parent.getSocketJs().sendMessage({ "SND_LGI": { "ERROR": err.sqlMessage } });
@@ -25,7 +27,7 @@
                                 //callback.call(this);
                                 //return false;
                             }
-                            if (result[0][0].app_usr_ssn_key) {
+                            else if (result[0][0].app_usr_ssn_key) {
                                 //console.log({ "SND_LGI": { "ssn_key": result[0][0].app_usr_ssn_key } });
                                 //parent.getSocketJs().sendMessage({ "SND_LGI": { "ssn_key": result[0][0].app_usr_ssn_key } });
                                 parent.setSessionKey(result[0][0].app_usr_ssn_key);
