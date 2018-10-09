@@ -1,10 +1,6 @@
 ﻿module.exports = {
     SND_LGI: function (data, message) {
-        let crypto = require('crypto');
         let parent = data.parent;
-        let usr = message.usr;
-        let psw = crypto.createHash('sha256').update(message.psw).digest('hex');
-        let cli_ip = message.cli_ip;
         let rt = null;
 
         this.init = function () {

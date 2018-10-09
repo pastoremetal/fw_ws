@@ -20,10 +20,10 @@ function Client(socketIn, socketInJs, database) {
     let commandChains = {};
     let that = this;
 
-    /*let loginTimeout = setTimeout(function () {
+    let loginTimeout = setTimeout(function () {
         if (this.getLoginTime() === null)
             this.closeClient();
-    }.bind(this), 15000);*/
+    }.bind(this), 15000);
 
     this.executeCommand = function (i, message) {
         let rt = null;
@@ -72,8 +72,8 @@ function Client(socketIn, socketInJs, database) {
 
     this.receiveCommand = function (message) {
         let that = this;
+        console.log(message);
         if (message != undefined && typeof message == "object") {
-            //console.log(message);
             commandChains[chainCount] = new CommandChain(message, that, chainCount);
             //console.log('ini');
             //commandChains[chainCount].startChain();

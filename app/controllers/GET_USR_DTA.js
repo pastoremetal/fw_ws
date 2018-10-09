@@ -1,18 +1,16 @@
 ﻿module.exports = {
-    SND_LGI: function (data, message) {
-        let crypto = require('crypto');
+    GET_USR_DTA: function (data, message) {
         let parent = data.parent;
         let usr = message.usr;
-        let psw = crypto.createHash('sha256').update(message.psw).digest('hex');
-        let cli_ip = message.cli_ip;
+        let ssnKey = message.sessionkey;
         let rt = null;
 
         this.init = function () {
             try {
                 rt = new Promise((resolve, reject) => {
-                    if (usr == undefined || psw == undefined || usr == '' || psw == '') {
-                        console.log({ "SND_LGI": { "ERROR": "BLANK USER OR PASSWORD" } });
-                        reject({ "SND_LGI": { "ERROR": "BLANK USER OR PASSWORD" } });
+                    if (ssnKey == undefined || ssnKey == '') {
+                        console.log({ "SND_LGI": { "ERROR": "BLANK SESSION KEY" } });
+                        reject({ "SND_LGI": { "ERROR": "BLANK SESSION KEY" } });
                     }
                     parent.getDb().getConn().execute("CALL prc_usr_login(?, ?, ?, ?, ?)", [parent.getAppKey(), parent.getAddress(), usr, psw, cli_ip], function (err, result) {
                         if (err) {
