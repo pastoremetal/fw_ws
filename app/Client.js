@@ -25,17 +25,19 @@ function Client(socketIn, socketInJs, database) {
             this.closeClient();
     }.bind(this), 15000);
 
-    this.executeCommand = function (i, message) {
+    this.executeCommand = async function (i, message) {
         let rt = null;
         try {
-            let controller = router.getController(i);
+            let controller = router.getController(i, message, that);
             let instance = new controller[i]({ parent: that }, message);
             rt = instance.init();
             return rt;
         } catch (err) {
-            console.log(err);
-            socketJs.sendMessage({ "ERROR": err });
+            //console.log(err);
+            //socketJs.sendMessage({ "ERROR": err });
+            return { "ERROR": err };
         }
+        return true;
     }
 
     this.getAddress = function () { return address; }

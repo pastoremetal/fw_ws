@@ -1,16 +1,40 @@
 ﻿module.exports = {
     Router: function () {
         let routes = {
-            "SND_LGI": { class: './controllers/SND_LGI', object: null },
-            "VLD_APP": { class: './controllers/VLD_APP', object: null },
-            "GET_CNR": { class: './controllers/GET_CNR', object: null },
-            "INS_CHA": { class: './controllers/CHARACTER/INS', object: null }
+            "SND_LGI": { class: './controllers/SND_LGI', validations: {} },
+            "VLD_APP": { class: './controllers/VLD_APP', validations: {} },
+            "GET_CNR": { class: './controllers/GET_CNR', validations: {} },
+            "SND_INS_CHA": {
+                class: './controllers/CHARACTER/SND_INS_CHA', validations: {
+                    req_ssn_key: true
+                }
+            }
         };
 
-        this.getController = function (controller) {
-            if (routes[controller] != undefined)
-                return require(routes[controller].class);
-            else
+        let testValidations = (validations, message, client) => {
+            for (i in validations) {
+                if (validations[i] === true)
+                    switch (i) {
+                        case 'req_ssn_key':
+                            //console.log(message.ssn_key);
+                            //console.log(client.getSessionKey());
+                            if (message.ssn_key !== client.getSessionKey())
+                                return "WRONG SESSION KEY";
+                            break;
+                    };
+            };
+            return true;
+        };
+
+        this.getController = function (controller, message, client) {
+            if (routes[controller] != undefined) {
+                console.log("VALIDATING CONTROLLER");
+                let validationRes = testValidations(routes[controller].validations, message, client);
+                if (validationRes === true)
+                    return require(routes[controller].class);
+                else
+                    throw validationRes;
+            } else
                 throw "INVALID CONTROLLER";
         }
 

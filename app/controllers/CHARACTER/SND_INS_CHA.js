@@ -1,12 +1,22 @@
-﻿module.exports = {
-    SND_LGI: function (data, message) {
+﻿const xmlJs = require('xml-js');
+module.exports = {
+    SND_INS_CHA: function (data, message) {
         let parent = data.parent;
+        let usr = message.usr;
         let rt = null;
 
         this.init = function () {
             try {
                 rt = new Promise((resolve, reject) => {
-                    if (usr == undefined || psw == undefined || usr == '' || psw == '') {
+                    /*
+                     * in_cha_app_usr
+                     * in_cha_nme
+                     * in_con_atb_lst
+                    
+                    console.log(in_cha_app_usr);
+                    console.log(in_cha_nme);
+                    console.log(in_con_atb_lst.keys);
+                    /*if (usr == undefined || psw == undefined || usr == '' || psw == '') {
                         console.log({ "SND_LGI": { "ERROR": "BLANK USER OR PASSWORD" } });
                         reject({ "SND_LGI": { "ERROR": "BLANK USER OR PASSWORD" } });
                     }
@@ -18,7 +28,7 @@
                             parent.setSessionKey(result[0][0].app_usr_ssn_key);
                             resolve({ "SND_LGI": { "ssn_key": result[0][0].app_usr_ssn_key } });
                         }
-                    });
+                    });*/
                 });
                 return rt;
 

@@ -18,24 +18,25 @@
         console.log("STARTING CHAIN");
         for (let i in commands) {
             console.log("CHAINING-> " + i);
-            if (client.getAppValidated() === true && i != "SND_APP_KEY")
-                pRet = await client.executeCommand(i, commands[i]).catch(function (error) { return error;});
-            else if (i == "SND_APP_KEY") {
-                pRet = await client.executeCommand("VLD_APP", commands[i]).catch(function (error) { return error; });
+            if (client.getAppValidated() === true && i != "SND_APP_KEY") {
+                pRet = await client.executeCommand(i, commands[i]);
+            } else if (i == "SND_APP_KEY") {
+                pRet = await client.executeCommand("VLD_APP", commands[i]);
 
             } else {
                 msg = {};
                 msg[i] = { "ERROR": "APP VALIDATION NEEDED" };
-                console.log(msg);
+                //console.log(msg);
                 pRet = client.getSocketJs().sendMessage(msg);
             }
-
+            //console.log(typeof pRet);
             msg = Object.assign({}, msg, pRet);
+            //console.log(msg);
             //console.log(pRet);
             //await console.log(pRet);
         }
 
-        //console.log(msg);
+        console.log(msg);
         client.getSocketJs().sendMessage(msg);
     };
 
