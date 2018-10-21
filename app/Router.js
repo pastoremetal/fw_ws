@@ -16,8 +16,6 @@
                 if (validations[i] === true)
                     switch (i) {
                         case 'req_ssn_key':
-                            //console.log(message.ssn_key);
-                            //console.log(client.getSessionKey());
                             if (message.ssn_key !== client.getSessionKey())
                                 return "WRONG SESSION KEY";
                             break;
