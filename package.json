@@ -13,10 +13,16 @@
   "author": "",
   "license": "ISC",
   "homepage": "https://bitbucket.org/pastoremetal/falling_worlds_ws#readme",
+  "devDependecies": {
+    "eslint": "^5.7.0"
+  },
   "dependencies": {
+    "http": "0.0.0",
     "json-socket": "^0.3.0",
+    "json-websocket": "^0.1.5",
     "mysql2": "^1.6.1",
     "net": "^1.0.2",
+    "websocket": "^1.0.28",
     "xml-js": "^1.6.8"
   }
 }

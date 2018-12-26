@@ -3,7 +3,7 @@ function DB() {
     let host = "localhost";
     let user = "root";
     let pass = "1478963";
-    let database = "falling_worlds";
+    let database = "fw_ws";
     //let socketPath = "";
     let con = null;
     let connect = function () {
